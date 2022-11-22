@@ -1,0 +1,32 @@
+name: 'Demo approvals'
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  dev-deploy:
+    runs-on: ubuntu-latest
+    environment: 'DEV'
+    steps:
+      - name: dev plan
+        run: echo "DEV PLAN"
+      - name: dev apply
+        run: echo "DEV APPLY"
+
+  prod-plan:
+    runs-on: 'ubuntu-latest'
+    environment: 'PROD'
+    needs: dev-deploy
+    steps:
+      - name: prod plan
+        run: echo "PROD PLAN"
+        
+  prod-apply:
+    runs-on: 'ubuntu-latest'
+    environment: 'PROD'
+    needs: [dev-deploy, prod-plan]
+    steps:
+      - name: prod apply
+        run: echo "PROD APPLY"
