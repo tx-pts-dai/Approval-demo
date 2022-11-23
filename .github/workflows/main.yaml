@@ -15,10 +15,19 @@ jobs:
       - name: dev apply
         run: echo "DEV APPLY"
 
+  int-deploy:
+    runs-on: ubuntu-latest
+    environment: 'INT'
+    steps:
+      - name: int plan
+        run: echo "INT PLAN"
+      - name: int apply
+        run: echo "INT APPLY"
+        
   prod-plan:
     runs-on: 'ubuntu-latest'
     environment: 'PROD'
-    needs: dev-deploy
+    needs: [dev-deploy, int-deploy]
     steps:
       - name: prod plan
         run: echo "PROD PLAN"
@@ -26,7 +35,7 @@ jobs:
   prod-apply:
     runs-on: 'ubuntu-latest'
     environment: 'PROD'
-    needs: [dev-deploy, prod-plan]
+    needs: [prod-plan]
     steps:
       - name: prod apply
         run: echo "PROD APPLY"
